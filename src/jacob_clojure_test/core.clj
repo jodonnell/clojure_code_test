@@ -4,10 +4,10 @@
 (import [org.joda.time.format DateTimeFormat])
 
 (defn date [string]
-  (.parseLocalDate (DateTimeFormat/forPattern "MM-dd-yyyy") string))
+  (.parseLocalDate (DateTimeFormat/forPattern "MM/dd/yyyy") string))
 
 (defn print-person [person]
-  (println (get person :last) (get person :first) (get person :gender) (get person :birthday) (get person :color)))
+  (println (get person :last) (get person :first) (get person :gender) (.toString (get person :birthday) "MM/dd/yyyy") (get person :color)))
 
 (defn split-on-newline [string]
   (split string #"\n"))
@@ -22,7 +22,7 @@
   (split string #" \| "))
 
 (defn get-file-lines [filename]
-  (split-on-newline (slurp filename)))
+  (split-on-newline (replace (slurp filename) "-" "/")))
 
 (defn gender-normalize [person]
   (merge person {:gender 
@@ -31,9 +31,8 @@
                    "F" "Female"
                    (get person :gender))}))
 
-(defn date-normalize [person]
-  (merge person {:date
-                 (replace (get person :date) "-" "/")}))
+(defn string-to-date [person]
+  (merge person {:birthday (date (get person :birthday))}))
 
 (defn remove-middle-name [records]
   (concat (subvec records 0 2) (subvec records 3)))
@@ -48,13 +47,13 @@
    (zipmap [:last :first :gender :color :birthday] person-fields))
 
 (defn space-records []
-  (map gender-normalize (map space-create-person (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt"))))))
+  (map string-to-date (map gender-normalize (map space-create-person (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt")))))))
 
 (defn comma-records []
-  (map comma-create-person (map split-on-comma (get-file-lines "src/jacob_clojure_test/comma.txt"))))
+  (map string-to-date (map comma-create-person (map split-on-comma (get-file-lines "src/jacob_clojure_test/comma.txt")))))
 
 (defn pipe-records []
-  (map gender-normalize (map pipe-create-person (map remove-middle-name (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt"))))))
+  (map string-to-date (map gender-normalize (map pipe-create-person (map remove-middle-name (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt")))))))
 
 (defn all-records []
   (into (into (space-records) (comma-records)) (pipe-records)))
@@ -66,7 +65,7 @@
   (reverse (sort-by :last (all-records))))
 
 (defn sort-by-date-then-last-name []
-  (sort-by :last (all-records)))
+  (sort-by :birthday (all-records)))
 
 (defn print-results []
   (println "Output 1:")
