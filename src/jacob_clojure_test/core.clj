@@ -82,4 +82,4 @@
 
 
 (defn -main [& args]
-  (print-results))
+  ())
