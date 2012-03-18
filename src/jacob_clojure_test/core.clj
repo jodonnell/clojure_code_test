@@ -47,16 +47,16 @@
    (zipmap [:last :first :gender :color :birthday] person-fields))
 
 (defn space-records []
-  (map string-to-date (map gender-normalize (map space-create-person (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt")))))))
+  (map space-create-person (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt")))))
 
 (defn comma-records []
-  (map string-to-date (map comma-create-person (map split-on-comma (get-file-lines "src/jacob_clojure_test/comma.txt")))))
+  (map comma-create-person (map split-on-comma (get-file-lines "src/jacob_clojure_test/comma.txt"))))
 
 (defn pipe-records []
-  (map string-to-date (map gender-normalize (map pipe-create-person (map remove-middle-name (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt")))))))
+  (map pipe-create-person (map remove-middle-name (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt")))))
 
 (defn all-records []
-  (into (into (space-records) (comma-records)) (pipe-records)))
+  (map gender-normalize (map string-to-date (into (into (space-records) (comma-records)) (pipe-records)))))
 
 (defn sort-by-gender-last-name []
   (sort-by #(vec (map % [:gender :last])) (all-records)))
@@ -65,7 +65,7 @@
   (reverse (sort-by :last (all-records))))
 
 (defn sort-by-date-then-last-name []
-  (sort-by :birthday (all-records)))
+  (sort-by #(vec (map % [:birthday :last])) (all-records)))
 
 (defn print-results []
   (println "Output 1:")
@@ -77,9 +77,5 @@
   (println "Output 3:")
   (doall (map print-person (sort-by-last-name-desc))))
 
-
-
-
-
 (defn -main [& args]
-  ())
+  (print-results))
