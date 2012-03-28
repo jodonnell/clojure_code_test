@@ -1,6 +1,5 @@
 (ns jacob_clojure_test.core
   (:require [clojure.string :as string]))
-(use '[clojure.string :only (split replace)])
 (import [org.joda.time.format DateTimeFormat])
 
 (defn date [string]
@@ -10,19 +9,19 @@
   (string/join " " [(get person :last) (get person :first) (get person :gender) (.toString (get person :birthday) "MM/dd/yyyy") (get person :color)]))
 
 (defn split-on-newline [string]
-  (split string #"\n"))
+  (string/split string #"\n"))
 
 (defn split-on-space [string]
-  (split string #" "))
+  (string/split string #" "))
 
 (defn split-on-comma [string]
-  (split string #", "))
+  (string/split string #", "))
 
 (defn split-on-pipe [string]
-  (split string #" \| "))
+  (string/split string #" \| "))
 
 (defn get-file-lines [filename]
-  (split-on-newline (replace (slurp filename) "-" "/")))
+  (split-on-newline (string/replace (slurp filename) "-" "/")))
 
 (defn gender-normalize [person]
   (merge person {:gender 
