@@ -32,26 +32,20 @@
 (defn string-to-date [person]
   (conj person [:birthday (date (:raw-birthday person))]))
 
-(defn remove-middle-name [records]
-  (concat (subvec records 0 2) (subvec records 3)))
-
 (defn space-create-person [person-fields]
-  (zipmap [:last :first :raw-gender :raw-birthday :color] person-fields))
+  (zipmap [:last :first :middle-nombre :raw-gender :raw-birthday :color] person-fields))
 
 (defn comma-create-person [person-fields]
   (zipmap [:last :first :raw-gender :color :raw-birthday] person-fields))
 
 (defn pipe-create-person [person-fields]
-  (comma-create-person person-fields))
+  (zipmap [:last :first :oooga :raw-gender :color :raw-birthday] person-fields))
 
 (defn space-fields []
-  (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt"))))
-
-(defn comma-fields []
-  (map remove-middle-name (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt"))))
+  (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt")))
 
 (defn pipe-fields []
-  (map remove-middle-name (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt"))))
+  (map split-on-pipe (get-file-lines "src/jacob_clojure_test/pipe.txt")))
 
 (defn comma-fields []
   (map split-on-comma (get-file-lines "src/jacob_clojure_test/comma.txt")))
