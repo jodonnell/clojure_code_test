@@ -23,24 +23,23 @@
 (defn get-file-lines [filename]
   (split-on-newline (string/replace (slurp filename) "-" "/")))
 
-(defn gender-normalize [person]
-  (merge person {:gender 
-                 (case (get person :gender)
-                   "M" "Male"
-                   "F" "Female"
-                   (get person :gender))}))
+(defn pretty-gender [string]
+  (case string "M" "Male" "F" "Female" string))
 
+(defn gender-normalize [person]
+  (conj person [:gender (pretty-gender (:raw-gender person))]))
+                 
 (defn string-to-date [person]
-  (merge person {:birthday (date (get person :birthday))}))
+  (conj person [:birthday (date (:raw-birthday person))]))
 
 (defn remove-middle-name [records]
   (concat (subvec records 0 2) (subvec records 3)))
 
 (defn space-create-person [person-fields]
-  (zipmap [:last :first :gender :birthday :color] person-fields))
+  (zipmap [:last :first :raw-gender :raw-birthday :color] person-fields))
 
 (defn comma-create-person [person-fields]
-  (zipmap [:last :first :gender :color :birthday] person-fields))
+  (zipmap [:last :first :raw-gender :color :raw-birthday] person-fields))
 
 (defn pipe-create-person [person-fields]
   (comma-create-person person-fields))
