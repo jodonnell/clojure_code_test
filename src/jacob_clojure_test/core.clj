@@ -1,13 +1,13 @@
-(ns jacob_clojure_test.core)
-
+(ns jacob_clojure_test.core
+  (:require [clojure.string :as string]))
 (use '[clojure.string :only (split replace)])
 (import [org.joda.time.format DateTimeFormat])
 
 (defn date [string]
   (.parseLocalDate (DateTimeFormat/forPattern "MM/dd/yyyy") string))
 
-(defn print-person [person]
-  (println (get person :last) (get person :first) (get person :gender) (.toString (get person :birthday) "MM/dd/yyyy") (get person :color)))
+(defn pretty-person [person]
+  (string/join " " [(get person :last) (get person :first) (get person :gender) (.toString (get person :birthday) "MM/dd/yyyy") (get person :color)]))
 
 (defn split-on-newline [string]
   (split string #"\n"))
@@ -81,13 +81,13 @@
 
 (defn print-results []
   (println "Output 1:")
-  (doall (map print-person (sort-by-gender-last-name)))
+  (println (string/join "\n" (map pretty-person (sort-by-gender-last-name))))
   (println "")
   (println "Output 2:")
-  (doall (map print-person (sort-by-date-then-last-name)))
+  (println (string/join "\n" (map pretty-person (sort-by-date-then-last-name))))
   (println "")
   (println "Output 3:")
-  (doall (map print-person (sort-by-last-name-desc))))
+  (println (string/join "\n" (map pretty-person (sort-by-last-name-desc)))))
 
 (defn -main [& args]
   (print-results))
