@@ -72,14 +72,15 @@
   (sort-by #(vec (map % [:birthday :last])) (all-records)))
 
 (defn print-results []
-  (println "Output 1:")
-  (println (string/join "\n" (map pretty-person (sort-by-gender-last-name))))
-  (println "")
-  (println "Output 2:")
-  (println (string/join "\n" (map pretty-person (sort-by-date-then-last-name))))
-  (println "")
-  (println "Output 3:")
-  (println (string/join "\n" (map pretty-person (sort-by-last-name-desc)))))
+  (println (str
+            "Output 1:\n"
+            (string/join "\n" (map pretty-person (sort-by-gender-last-name)))
+            "\n\n"
+            "Output 2:\n"
+            (string/join "\n" (map pretty-person (sort-by-date-then-last-name)))
+            "\n\n"
+            "Output 3:\n"
+            (string/join "\n" (map pretty-person (sort-by-last-name-desc))))))
 
 (defn -main [& args]
   (print-results))
