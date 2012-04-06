@@ -33,13 +33,13 @@
   (conj person [:birthday (date (:raw-birthday person))]))
 
 (defn space-create-person [person-fields]
-  (zipmap [:last :first :middle-nombre :raw-gender :raw-birthday :color] person-fields))
+  (zipmap [:last :first :middle :raw-gender :raw-birthday :color] person-fields))
 
 (defn comma-create-person [person-fields]
   (zipmap [:last :first :raw-gender :color :raw-birthday] person-fields))
 
 (defn pipe-create-person [person-fields]
-  (zipmap [:last :first :oooga :raw-gender :color :raw-birthday] person-fields))
+  (zipmap [:last :first :middle :raw-gender :color :raw-birthday] person-fields))
 
 (defn space-fields []
   (map split-on-space (get-file-lines "src/jacob_clojure_test/space.txt")))
